@@ -5,23 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Typing Test</title>
+
+    <!--google font-->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!--container for center white box-->
     <div class="container">
+        <!--onscreen stat tracker-->
         <div class="stats">
             <p>Time: <span id="timer">0s</span></p>
             <p>Mistakes: <span id="mistakes">0</span></p>
         </div>
+        <!--text prompt that appears-->
         <div id="quote" onmousedown="return false" onselectstart="return false">Lorem ipsum dolor sit amet consectetur
             adipisicing elit. In aspernatur magnam, exercitationem provident pariatur, ad sequi minus, ducimus
             repellendus excepturi est sapiente? Eaque, laudantium rerum.</div>
+        <!--text area that the user types in-->
         <textarea name="typingarea" id="quote-input" rows="3"
             placeholder="Type here when the test starts..."></textarea>
+        <!--this is a button-->
         <button id="start-test">Start Test</button>
+        <!--this is another button-->
         <button id="stop-test">Stop Test</button>
+        <!--results screen that shows up after the test is finished-->
         <div class="result">
             <h3>Result</h3>
             <div class="wrapper">
@@ -29,20 +38,7 @@
                 <p>Speed: <span id="wpm"></span></p>
             </div>
         </div>
-
-
-
-
-
-
     </div>
-
-
-
-
-
-
-
     <script src="script.js"></script>
 </body>
 
