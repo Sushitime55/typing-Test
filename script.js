@@ -9,7 +9,7 @@ let time = 60;
 let timer = "";
 let mistakes = 0;
 
-// display random quotes
+// get and display a random quote
 const renderNewQuote = async () => {
   // fetch content from url
   const response = await fetch(quoteApiUrl);
@@ -17,27 +17,31 @@ const renderNewQuote = async () => {
   // store response
   let data = await response.json();
 
-  // access data
+  // access content
   quote = data.content;
 
   // array of characters in the quote
   let arr = quote.split("").map((value) => {
-    //wrap the characters in a span tag for comparison
+    // wrap the characters in a span tag for easy comparison to user input
     return "<span class='quote-chars'>" + value + "</span>";
   });
 
+  // add quote to webpage
   quoteSection.innerHTML += arr.join("");
 };
 
-// logic for comparing input words with quote
+// logic for comparing quote with user input
 userInput.addEventListener("input", () => {
+  // assign all quote characters to a variable
   let quoteChars = document.querySelectorAll(".quote-chars");
-  // create an array from received span tags
+
+  // create an array from said variable
   quoteChars = Array.from(quoteChars);
 
-  // array of user input characters
+  // create array of user input characters
   let userInputChars = userInput.value.split("");
 
+  // compare quote to user input
   quoteChars.forEach((char, index) => {
     // check if quote character = user input character
     // [index](input character)
@@ -61,6 +65,7 @@ userInput.addEventListener("input", () => {
         mistakes += 1;
         char.classList.add("fail");
       }
+      // display mistakes on webpage
       document.getElementById("mistakes").innerText = mistakes;
     }
 
@@ -68,6 +73,7 @@ userInput.addEventListener("input", () => {
     let check = quoteChars.every((element) => {
       return element.classList.contains("success");
     });
+
     // end test if all characters are correct
     if (check) {
       displayResult();
@@ -75,33 +81,39 @@ userInput.addEventListener("input", () => {
   });
 });
 
-// start test
+// start test: initialize values, enable user input, start timer, hide start button, display stop button
 const startTest = () => {
   mistakes = 0;
   timer = "";
   userInput.disabled = false;
-  timeReduce();
+  timeStart();
   document.getElementById("start-test").style.display = "none";
   document.getElementById("stop-test").style.display = "block";
 };
 
-// end test
+// end test: clear timer, disable user input, calculate wpm and accuracy, hide stop button and show results info
 const displayResult = () => {
-  document.querySelector(".result").style.display = "block";
   clearInterval(timer);
-  document.getElementById("stop-test").style.display = "none";
   userInput.disabled = true;
+
+  // calculate time taken to calculate wpm below
   let timeTaken = 1;
   if (time != 0) {
     timeTaken = (60 - time) / 100;
   }
 
+  // calculate average wpm by dividing user input character length by some arbitrary value lolol wip
   document.getElementById("wpm").innerText =
     (userInput.value.length / 5 / timeTaken).toFixed(2) + "wpm";
+
+  // calculate % accuracy by dividing number of correct inputs by number of total inputs
   document.getElementById("accuracy").innerText =
     Math.round(
       ((userInput.value.length - mistakes) / userInput.value.length) * 100
     ) + "%";
+
+  document.getElementById("stop-test").style.display = "none";
+  document.querySelector(".result").style.display = "block";
 };
 
 // update timer
@@ -110,20 +122,22 @@ function updateTimer() {
     // end test if timer reaches 0
     displayResult();
   } else {
+    // display timer on screen
     document.getElementById("timer").innerText = --time + "s";
   }
 }
-// set timer
-const timeReduce = () => {
+
+// set timer, 60 seconds ticking down every second
+const timeStart = () => {
   time = 60;
   timer = setInterval(updateTimer, 1000);
 };
 
-// on window load, hide stop button, disable user input for textbox, and grab a random quote to display
+// on window load: disable user input for textbox, grab a random quote to display, show start button, and hide stop button
 window.onload = () => {
   userInput.value = "";
-  document.getElementById("start-test").style.display = "block";
-  document.getElementById("stop-test").style.display = "none";
   userInput.disabled = true;
   renderNewQuote();
+  document.getElementById("start-test").style.display = "block";
+  document.getElementById("stop-test").style.display = "none";
 };
