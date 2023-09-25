@@ -91,26 +91,37 @@ const startTest = () => {
   document.getElementById("stop-test").style.display = "block";
 };
 
-// end test: clear timer, disable user input, calculate wpm and accuracy, hide stop button and show results info
+// end test: clear timer, disable user input, calculate total characters, accuracy. time taken, and wpm, hide stop button and show results info
 const displayResult = () => {
   clearInterval(timer);
   userInput.disabled = true;
 
-  // calculate time taken to calculate wpm below
-  let timeTaken = 1;
-  if (time != 0) {
-    timeTaken = (60 - time) / 100;
-  }
-
-  // calculate average wpm by dividing user input character length by some arbitrary value lolol wip
-  document.getElementById("wpm").innerText =
-    (userInput.value.length / 5 / timeTaken).toFixed(2) + "wpm";
+  // display total number of characters on result screen
+  document.getElementById("totalChar").innerText = userInput.value.length;
 
   // calculate % accuracy by dividing number of correct inputs by number of total inputs
-  document.getElementById("accuracy").innerText =
-    Math.round(
-      ((userInput.value.length - mistakes) / userInput.value.length) * 100
-    ) + "%";
+  let accuracy = (
+    (userInput.value.length - mistakes) /
+    userInput.value.length
+  ).toFixed(2);
+  document.getElementById("accuracy").innerText = accuracy * 100 + "%";
+
+  // calculate time taken in seconds, and also time taken in minutes (adjusted from seconds)
+  let timeTakenSeconds = 1;
+  if (time != 0) {
+    timeTakenSeconds = 60 - time;
+    timeTakenAdjusted = timeTakenSeconds / 60;
+  }
+  // display time taken to complete
+  document.getElementById("totalTime").innerText = timeTakenSeconds + "s";
+
+  // calculate average wpm by dividing total characters input by 5 (defining a word as 5 characters) to get number of words, then dividing again by time taken in minutes
+  let wpm = (userInput.value.length / 5 / timeTakenAdjusted).toFixed(2);
+  document.getElementById("wpm").innerText = wpm + "wpm";
+
+  // calculate adjusted wpm (awpm) by taking into account the user's accuracy
+  let awpm = (wpm * accuracy).toFixed(2);
+  document.getElementById("awpm").innerText = awpm + "awpm";
 
   document.getElementById("stop-test").style.display = "none";
   document.querySelector(".result").style.display = "block";
