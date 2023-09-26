@@ -1,3 +1,13 @@
+/*
+Type tester that measures the user's accuracy and speed in wpm
+
+1. Fetch a random quote from quotable using their api
+2. Compare individual characters from quote to user input using arrays
+    if character matches, recolor quote character green
+    else recolor quote character red
+3. Once all characters match or time runs out, end test and show user their results
+*/
+
 // random quotes api url
 const quoteApiUrl = "https://api.quotable.io/random?minLength=80&maxLength=100";
 
